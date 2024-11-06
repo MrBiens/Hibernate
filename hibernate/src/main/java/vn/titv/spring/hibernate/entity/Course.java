@@ -3,6 +3,8 @@ package vn.titv.spring.hibernate.entity;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="course")
@@ -33,6 +35,17 @@ public class Course {
     @JoinColumn(name="teacher_id")
     private Teacher teacher;
 
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.DETACH,
+            CascadeType.REFRESH
+    })
+    @JoinTable(name = "course_student",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id"))
+    private List<Student> students;
+
     public Course() {
     }
 
@@ -41,6 +54,16 @@ public class Course {
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public Course(int id, String title, String description, Date startDate, Date endDate, Teacher teacher, List<Student> students) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.teacher = teacher;
+        this.students = students;
     }
 
     public int getId() {
@@ -91,6 +114,14 @@ public class Course {
         this.teacher = teacher;
     }
 
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
     @Override
     public String toString() {
         return "Course{" +
@@ -99,6 +130,14 @@ public class Course {
                 ", description='" + description + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", teacher=" + teacher +
                 '}';
+    }
+    public void add(Student student){
+        if(students == null){
+            students = new ArrayList<>();
+        }
+        students.add(student);
+
     }
 }

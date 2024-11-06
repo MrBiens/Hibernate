@@ -34,4 +34,22 @@ public class CourseDAOImpl implements CourseDAO{
         List<Course> courses = query.getResultList();
         return courses;
     }
+
+    @Override
+    public Course findCourseById(int id) {
+        return entityManager.find(Course.class,id);
+    }
+
+    @Override
+    public Course findCourseStudentAndByCourseId(int id) {
+        // create query
+        TypedQuery<Course> query = entityManager.createQuery(
+                "SELECT c FROM Course c " //chú ý : phải có dấu cách tránh bị liền
+                        +" JOIN FETCH c.students "
+                        +"where c.id =:x"
+                , Course.class);
+        query.setParameter("x",id);
+        //execute query
+        return query.getSingleResult();
+    }
 }
