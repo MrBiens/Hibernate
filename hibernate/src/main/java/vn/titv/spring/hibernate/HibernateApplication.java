@@ -6,9 +6,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import vn.titv.spring.hibernate.dao.CourseDAO;
+import vn.titv.spring.hibernate.dao.StudentDAO;
 import vn.titv.spring.hibernate.dao.TeacherDAO;
 import vn.titv.spring.hibernate.dao.TeacherDetailDAO;
 import vn.titv.spring.hibernate.entity.Course;
+import vn.titv.spring.hibernate.entity.Student;
 import vn.titv.spring.hibernate.entity.Teacher;
 import vn.titv.spring.hibernate.entity.TeacherDetail;
 
@@ -22,7 +24,7 @@ public class HibernateApplication {
 		SpringApplication.run(HibernateApplication.class, args);
 	}
 	@Bean
-	public CommandLineRunner commandLineRunner(TeacherDAO teacherDAO, TeacherDetailDAO teacherDetailDAO, CourseDAO courseDAO){
+	public CommandLineRunner commandLineRunner(TeacherDAO teacherDAO, TeacherDetailDAO teacherDetailDAO, CourseDAO courseDAO, StudentDAO<Student> studentDAO){
 		return runner -> {
 			// createTeacher(teacherDAO);
 
@@ -36,10 +38,53 @@ public class HibernateApplication {
 
 //			findTeacherWithCourse_Lazy(teacherDAO,courseDAO,3);
 
-			findTeacher_Lazy_JoinFetch(teacherDAO,1); // tối ưu code
+
+			// tối ưu code
+//			findTeacher_Lazy_JoinFetch(teacherDAO,1); // tối ưu code
+
+//			createCourseAndStudent(courseDAO,studentDAO);
+
+			findCourseAndStudentByCourseId(courseDAO,7);
+
+			findCourseAndStudentByStudentId(studentDAO,1);
+
+
 
 
 		};
+
+	}
+
+	private void findCourseAndStudentByStudentId(StudentDAO<Student> studentDAO, int id) {
+		Student student = studentDAO.findStudentCourseAndByStudentId(id);
+		System.out.println("Student:"+student);
+
+	}
+
+	private void findCourseAndStudentByCourseId(CourseDAO courseDAO, int id) {
+		Course course = courseDAO.findCourseStudentAndByCourseId(id);
+		System.out.println("Course : "+course);
+
+	}
+
+	//many to many
+	private void createCourseAndStudent(CourseDAO courseDAO, StudentDAO<Student> studentDAO) {
+		Course course = new Course();
+		course.setTitle("Lập trình Spring MVC kết hợp Spring Boot");
+
+		Student student = new Student();
+		student.setFirstName("SBIT");
+		student.setLastName("MR");
+
+		Student student2 = new Student();
+		student2.setFirstName("TITV");
+		student2.setLastName("VN");
+
+		course.add(student);
+		course.add(student2);
+
+
+		courseDAO.save(course);
 
 	}
 

@@ -10,4 +10,8 @@ public interface CourseDAO {
 
     List<Course> findCourseByTeacherId(int id);
 
+    public Course findCourseById(int id);
+
+    public Course findCourseStudentAndByCourseId(int id);
+
 }

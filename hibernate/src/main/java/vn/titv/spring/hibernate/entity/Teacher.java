@@ -108,7 +108,8 @@ public class Teacher {
             this.courses = new ArrayList<>();
         }
 
-        this.courses.add(course);
-        course.setTeacher(this);
+        this.courses.add(course); // add course vào List courses
+        course.setTeacher(this); // add ngược lại teacher vào course
+
     }
 }
