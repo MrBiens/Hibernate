@@ -26,7 +26,9 @@ public class Teacher {
     @JoinColumn(name = "teacher_detail_id")
     private TeacherDetail teacherDetail;
 
-    @OneToMany(mappedBy = "teacher", cascade = {
+    //Lazy sẽ có lỗi
+    @OneToMany(fetch=FetchType.LAZY
+            ,mappedBy = "teacher", cascade = {
             CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH
     })

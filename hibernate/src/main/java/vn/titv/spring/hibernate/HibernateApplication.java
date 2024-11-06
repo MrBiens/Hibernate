@@ -30,9 +30,49 @@ public class HibernateApplication {
 
 			// findTeacherDetailById(teacherDetailDAO, 1);
 
-			createCourses(teacherDAO, courseDAO);
+//			createCourses(teacherDAO, courseDAO);
+
+//			findTeacherWithCourse(teacherDAO,1);
+
+//			findTeacherWithCourse_Lazy(teacherDAO,courseDAO,3);
+
+			findTeacher_Lazy_JoinFetch(teacherDAO,1); // tối ưu code
+
+
 		};
+
 	}
+
+	private void findTeacherWithCourse(TeacherDAO teacherDAO, int id) {
+			Teacher teacherEAGER= teacherDAO.findTeacherById(id);
+			System.out.println("Teacher is information"+teacherEAGER);
+			System.out.println("List of course"+teacherEAGER.getCourses());
+	}
+
+	private void findTeacherWithCourse_Lazy(TeacherDAO teacherDAO,CourseDAO courseDAO, int id) {
+		//find teacher by id
+		Teacher teacherEAGER= teacherDAO.findTeacherById(id);
+		System.out.println("Teacher is information"+teacherEAGER);
+		//select course
+		List<Course> courses = courseDAO.findCourseByTeacherId(teacherEAGER.getId());
+		teacherEAGER.setCourses(courses);
+		// print list courses
+		System.out.println("List of course"+teacherEAGER.getCourses());
+	}
+	private void findTeacher_Lazy_JoinFetch(TeacherDAO teacherDAO, int id) {
+		//find teacher by id
+		Teacher teacherEAGER= teacherDAO.findTeacherByIdJoinFetch(id);
+		System.out.println("Teacher is information"+teacherEAGER);
+
+		//select course ( Unnecessary)
+//		List<Course> courses = courseDAO.findCourseByTeacherId(teacherEAGER.getId());
+//		teacherEAGER.setCourses(courses);
+
+		// print list courses
+		System.out.println("List of course"+teacherEAGER.getCourses());
+	}
+
+
 
 	@Transactional
 	private void createCourses(TeacherDAO teacherDAO, CourseDAO courseDAO) {
