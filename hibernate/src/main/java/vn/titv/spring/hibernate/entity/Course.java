@@ -24,7 +24,9 @@ public class Course {
     @Column(name="end_date")
     private Date endDate;
 
-    @ManyToOne(cascade = {
+    //EAGER : Khi load teacher sẽ lấy tất cả thông tin của course để tìm kiếm -> tốn tài nguyên
+    @ManyToOne(fetch = FetchType.LAZY
+            ,cascade = {
             CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH
     })

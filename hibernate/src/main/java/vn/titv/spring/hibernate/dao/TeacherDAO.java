@@ -9,7 +9,10 @@ public interface TeacherDAO {
 
     public Teacher findTeacherById(int id);
 
-    void deleteTeacherById(int id);
+    public void deleteTeacherById(int id);
 
-    void update(Teacher teacher);
+    public void update(Teacher teacher);
+
+    public Teacher findTeacherByIdJoinFetch(int id);
+
 }
